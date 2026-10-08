@@ -1,6 +1,6 @@
 <?php
 
-const GAME_PLACEHOLDER_IMAGE = 'sem-imagem.png';
+const GAME_PLACEHOLDER_IMAGE = 'mario-kart-8-deluxe.webp';
 
 function diretorioImagensGames(): string
 {

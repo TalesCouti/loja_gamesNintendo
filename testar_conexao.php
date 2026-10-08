@@ -13,15 +13,15 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status da loja | PlayStation</title>
-    <link rel="icon" type="image/png" href="admin/public/imagens/logo.png">
+    <meta name="theme-color" content="#e60012">
+    <title>Status da loja | Nintendo Store</title>
     <link rel="stylesheet" href="admin/public/css/style.css">
 </head>
 <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
         <nav class="nav" aria-label="Navegação principal">
-            <a class="brand" href="index.php"><span class="brand-mark"><img src="admin/public/imagens/logo.png" alt=""></span> PlayStation</a>
+            <a class="brand" href="index.php"><span class="brand-lockup">Nintendo</span><span class="brand-store">Store</span></a>
             <div class="nav-links">
                 <a class="nav-link" href="index.php">Ver loja</a>
                 <a class="nav-link" href="admin/views/ver_games.php">Painel</a>

@@ -22,6 +22,8 @@ INSERT INTO usuarios (nome, email, senha, tipo) VALUES
 ('evandro', 'evandro@gmail.com', SHA2('admin123', 256), 'admin'),
 ('pedro', 'pedro@gmail.com', SHA2('user123', 256), 'user');
 INSERT INTO games (titulo, descricao, preco, estoque, categoria, imagem) VALUES
-('Bloodborne', 'Um jogo souls like.', 114.90, 10, 'Ação,RPG', 'Bloodborne.png'),
-('God of War', 'Jogo de ação com Kratos em uma jornada épica.', 249.99, 15, 'Ação', 'gow.png'),
-('The Last of Us', 'Jogo de sobrevivência em 3° pessoa em um apocalipse.', 131.05, 20, 'Aventura, Ação', 'TheLastofUs.png');
+('The Legend of Zelda: Tears of the Kingdom', 'Explore as terras e os céus de Hyrule usando novas habilidades para criar seu próprio caminho.', 349.90, 18, 'Aventura, Ação', 'zelda-tears-of-the-kingdom.webp'),
+('Super Mario Bros. Wonder', 'Viaje pelo Reino Flor e descubra fases que se transformam de maneiras surpreendentes.', 299.90, 24, 'Plataforma, Família', 'super-mario-bros-wonder.webp'),
+('Mario Kart 8 Deluxe', 'Dispute corridas com Mario e seus amigos em pistas cheias de atalhos, itens e desafios.', 299.90, 30, 'Corrida, Multijogador', 'mario-kart-8-deluxe.webp'),
+('Animal Crossing: New Horizons', 'Crie sua ilha, faça novos amigos e viva cada dia no seu próprio ritmo.', 299.90, 16, 'Simulação, Família', 'animal-crossing-new-horizons.webp'),
+('Pikmin 4', 'Lidere pequenos Pikmin em uma grande expedição repleta de estratégia, resgates e descobertas.', 299.90, 12, 'Estratégia, Aventura', 'pikmin-4.webp');

@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Acesso à área administrativa da PlayStation.">
-    <title>Entrar | PlayStation</title>
-    <link rel="icon" type="image/png" href="admin/public/imagens/logo.png">
+    <meta name="description" content="Acesso à área administrativa da Nintendo Store.">
+    <meta name="theme-color" content="#e60012">
+    <title>Entrar | Nintendo Store</title>
     <link rel="stylesheet" href="admin/public/css/style.css">
 </head>
 <body>
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="auth-page" id="conteudo">
         <div class="auth-layout">
             <section>
-                <a class="brand" href="index.php"><span class="brand-mark"><img src="admin/public/imagens/logo.png" alt=""></span> PlayStation</a>
+                <a class="brand" href="index.php"><span class="brand-lockup">Nintendo</span><span class="brand-store">Store</span></a>
                 <h1 class="auth-title" style="margin-top: 48px;">Bem-vindo de volta.</h1>
                 <p class="auth-copy">Acesse o painel para cadastrar, editar e organizar o catálogo.</p>
             </section>

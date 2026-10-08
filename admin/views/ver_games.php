@@ -18,15 +18,15 @@ function h(string $value): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar jogos | PlayStation</title>
-    <link rel="icon" type="image/png" href="../public/imagens/logo.png">
+    <meta name="theme-color" content="#e60012">
+    <title>Gerenciar jogos | Nintendo Store</title>
     <link rel="stylesheet" href="../public/css/style.css">
 </head>
 <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
         <nav class="nav" aria-label="Navegação administrativa">
-            <a class="brand" href="../../index.php"><span class="brand-mark"><img src="../public/imagens/logo.png" alt=""></span> PlayStation</a>
+            <a class="brand" href="../../index.php"><span class="brand-lockup">Nintendo</span><span class="brand-store">Store</span></a>
             <div class="nav-links">
                 <a class="nav-link" href="../../index.php">Ver loja</a>
                 <a class="nav-link" aria-current="page" href="ver_games.php">Jogos</a>

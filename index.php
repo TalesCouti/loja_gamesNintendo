@@ -4,6 +4,7 @@ require_once __DIR__ . '/admin/config/imagens.php';
 
 $gameModel = new Game();
 $games = $gameModel->listarGames();
+$totalGames = count($games);
 
 function h(string $value): string
 {
@@ -15,19 +16,19 @@ function h(string $value): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Descubra jogos para viver novas histórias na PlayStation.">
-    <title>PlayStation | Sua próxima aventura</title>
-    <link rel="icon" type="image/png" href="admin/public/imagens/logo.png">
+    <meta name="description" content="Explore jogos para Nintendo Switch e encontre sua próxima aventura.">
+    <meta name="theme-color" content="#e60012">
+    <title>Nintendo Store | Jogue do seu jeito</title>
+    <link rel="preload" as="image" href="admin/public/imagens/zelda-tears-of-the-kingdom.webp">
     <link rel="stylesheet" href="admin/public/css/style.css">
 </head>
 <body class="storefront-page">
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
-    <div class="sony-ribbon" aria-hidden="true"><span>SONY</span></div>
     <header class="site-header">
         <nav class="nav" aria-label="Navegação principal">
-            <a class="brand store-brand" href="index.php">
-                <span class="brand-mark"><img src="admin/public/imagens/logo.png" alt=""></span>
-                <span>PlayStation <strong>Store</strong></span>
+            <a class="brand store-brand" href="index.php" aria-label="Nintendo Store - página inicial">
+                <span class="brand-lockup">Nintendo</span>
+                <span class="brand-store">Store</span>
             </a>
             <div class="nav-links">
                 <a class="nav-link" href="#catalogo">Catálogo</a>
@@ -39,32 +40,45 @@ function h(string $value): string
     <main id="conteudo">
         <section class="storefront-hero" aria-labelledby="destaque-titulo">
             <div class="container store-hero-stage">
-                <img class="store-hero-art" src="admin/public/imagens/TheLastofUs.png" width="554" height="554" alt="Ellie diante de uma cidade tomada pela natureza em The Last of Us Part II Remastered">
                 <div class="store-hero-content">
                     <div class="store-hero-copy">
-                        <p class="store-kicker">PlayStation Studios</p>
-                        <h1 id="destaque-titulo">The Last of Us Part II Remastered</h1>
-                        <p>Uma jornada intensa de sobrevivência, escolhas e consequências em uma Seattle tomada pela natureza.</p>
-                        <a class="button store-hero-button" href="#catalogo">Explorar catálogo</a>
+                        <p class="store-kicker">Destaque Nintendo Switch</p>
+                        <h1 id="destaque-titulo">A aventura está lá em cima.</h1>
+                        <p>Explore Hyrule por terra e pelos céus em uma jornada feita para Nintendo Switch.</p>
+                        <a class="button store-hero-button" href="#catalogo">Ver jogos</a>
                     </div>
+                </div>
+                <div class="store-hero-media">
+                    <img src="admin/public/imagens/zelda-tears-of-the-kingdom.webp" width="1200" height="675" alt="Link contempla as ilhas flutuantes de Hyrule em The Legend of Zelda: Tears of the Kingdom">
                 </div>
             </div>
         </section>
 
-        <section class="section" id="catalogo">
+        <section class="store-benefits" aria-label="Vantagens da loja">
+            <div class="container benefit-list">
+                <p><strong>Jogos para todos</strong><span>Aventura, corrida, estratégia e diversão em família.</span></p>
+                <p><strong>Catálogo Nintendo</strong><span>Grandes séries reunidas em um só lugar.</span></p>
+                <p><strong>Estoque atualizado</strong><span>Consulte a disponibilidade direto na vitrine.</span></p>
+            </div>
+        </section>
+
+        <section class="section catalog-section" id="catalogo">
             <div class="container">
                 <div class="section-heading">
-                    <h2>Escolha seu próximo jogo</h2>
-                    <p>Explore o catálogo disponível e encontre uma nova aventura.</p>
+                    <h2>Escolha sua próxima aventura</h2>
+                    <p><?= $totalGames ?> <?= $totalGames === 1 ? 'jogo disponível' : 'jogos disponíveis' ?> no catálogo.</p>
                 </div>
 
                 <?php if ($games): ?>
                     <div class="game-grid">
-                        <?php foreach ($games as $game): ?>
-                            <article class="game-card">
-                                <img class="game-cover" src="admin/public/imagens/<?= rawurlencode(imagemGameOuPlaceholder($game['imagem'] ?? '')) ?>" alt="Capa de <?= h($game['titulo']) ?>" loading="lazy" width="638" height="480">
+                        <?php foreach ($games as $index => $game): ?>
+                            <article class="game-card<?= $index === 0 ? ' game-card-featured' : '' ?>">
+                                <div class="game-cover-wrap">
+                                    <img class="game-cover" src="admin/public/imagens/<?= rawurlencode(imagemGameOuPlaceholder($game['imagem'] ?? '')) ?>" alt="Imagem de <?= h($game['titulo']) ?>" loading="<?= $index < 2 ? 'eager' : 'lazy' ?>" width="1200" height="675">
+                                </div>
                                 <div class="game-card-body">
-                                    <div>
+                                    <div class="game-card-copy">
+                                        <span class="game-platform">Nintendo Switch</span>
                                         <h3><?= h($game['titulo']) ?></h3>
                                         <p><?= h($game['descricao'] ?: 'Uma nova experiência espera por você.') ?></p>
                                         <div class="game-meta">
@@ -81,6 +95,7 @@ function h(string $value): string
                     <div class="empty-state">
                         <h2>Catálogo em preparação</h2>
                         <p>Os jogos aparecerão aqui assim que forem cadastrados.</p>
+                        <a class="button" href="login.php">Acessar painel</a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -88,7 +103,10 @@ function h(string $value): string
     </main>
 
     <footer class="site-footer">
-        <div class="container">PlayStation. Feito para quem gosta de boas histórias.</div>
+        <div class="container footer-content">
+            <span class="brand-lockup">Nintendo</span>
+            <p>Projeto demonstrativo de uma loja de jogos. Nintendo e suas franquias pertencem aos respectivos titulares.</p>
+        </div>
     </footer>
 </body>
 </html>

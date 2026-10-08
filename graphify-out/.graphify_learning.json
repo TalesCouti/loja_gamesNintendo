@@ -1,5 +1,86 @@
 {
-  "generated_at": "2026-10-05T19:28:53.101567+00:00",
-  "nodes": {},
+  "generated_at": "2026-10-08T20:12:31.808193+00:00",
+  "nodes": {
+    "admin_config_conexao": {
+      "code_fingerprint": "0b153e95719a668e447f8f5f46f0983b62cc5bddf1cf90bf40c15a82a175d7b5",
+      "label": "conexao.php",
+      "last": "2026-10-05T19:31:00.555670+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-05T19:31:00.555670+00:00",
+          "outcome": "useful",
+          "q": "pode criar models compativeis?"
+        }
+      ],
+      "score": 0.932411607,
+      "source_file": "admin/config/conexao.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "admin_controllers_deletar_game": {
+      "code_fingerprint": "8b280bbb4932820b9c969f608b80771283feb375874b4842eaeff6686844f4eb",
+      "label": "deletar_game.php",
+      "last": "2026-10-05T19:31:00.555670+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-05T19:31:00.555670+00:00",
+          "outcome": "useful",
+          "q": "pode criar models compativeis?"
+        }
+      ],
+      "score": 0.932411607,
+      "source_file": "admin/controllers/deletar_game.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "admin_views_cadastrar_game": {
+      "code_fingerprint": "7f8be40a91447fcf4d1b315119c52774c5fef4af32e6ec4fa5b5ac51fee9f667",
+      "label": "cadastrar_game.php",
+      "last": "2026-10-05T19:31:00.555670+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-05T19:31:00.555670+00:00",
+          "outcome": "useful",
+          "q": "pode criar models compativeis?"
+        }
+      ],
+      "score": 0.932411607,
+      "source_file": "admin/views/cadastrar_game.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "admin_views_editar_game": {
+      "code_fingerprint": "",
+      "label": "editar_game.php",
+      "last": "2026-10-05T19:31:00.555670+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-05T19:31:00.555670+00:00",
+          "outcome": "useful",
+          "q": "pode criar models compativeis?"
+        }
+      ],
+      "score": 0.932411607,
+      "source_file": "admin/views/editar_game.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "banco_de_dados_schema_games": {
+      "code_fingerprint": "64b35ed4364dc61c6ee4c8ba0e44b2dc0d3da05d2ed624ea8f8021f8e7216a8d",
+      "label": "games table",
+      "last": "2026-10-05T19:31:00.555670+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-05T19:31:00.555670+00:00",
+          "outcome": "useful",
+          "q": "pode criar models compativeis?"
+        }
+      ],
+      "score": 0.932411607,
+      "source_file": "banco de dados/schema.txt",
+      "status": "tentative",
+      "uses": 1
+    }
+  },
   "version": 1
 }
