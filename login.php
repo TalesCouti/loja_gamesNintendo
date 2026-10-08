@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="auth-page" id="conteudo">
         <div class="auth-layout">
             <section>
-                <a class="brand" href="index.php"><span class="brand-lockup">Nintendo</span><span class="brand-store">Store</span></a>
+                <a class="brand" href="index.php" aria-label="Nintendo Store - página inicial"><img class="brand-logo" src="admin/public/imagens/logo.png" alt="" aria-hidden="true"><span class="brand-store">Store</span></a>
                 <h1 class="auth-title" style="margin-top: 48px;">Bem-vindo de volta.</h1>
                 <p class="auth-copy">Acesse o painel para cadastrar, editar e organizar o catálogo.</p>
             </section>

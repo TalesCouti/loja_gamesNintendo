@@ -27,7 +27,7 @@ function h(string $value): string
     <header class="site-header">
         <nav class="nav" aria-label="Navegação principal">
             <a class="brand store-brand" href="index.php" aria-label="Nintendo Store - página inicial">
-                <span class="brand-lockup">Nintendo</span>
+                <img class="brand-logo" src="admin/public/imagens/logo.png" alt="" aria-hidden="true">
                 <span class="brand-store">Store</span>
             </a>
             <div class="nav-links">
@@ -104,7 +104,7 @@ function h(string $value): string
 
     <footer class="site-footer">
         <div class="container footer-content">
-            <span class="brand-lockup">Nintendo</span>
+            <img class="brand-logo footer-logo" src="admin/public/imagens/logo.png" alt="Nintendo">
             <p>Projeto demonstrativo de uma loja de jogos. Nintendo e suas franquias pertencem aos respectivos titulares.</p>
         </div>
     </footer>

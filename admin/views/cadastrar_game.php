@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
         <nav class="nav" aria-label="Navegação administrativa">
-            <a class="brand" href="../../index.php"><span class="brand-lockup">Nintendo</span><span class="brand-store">Store</span></a>
+            <a class="brand" href="../../index.php" aria-label="Nintendo Store - página inicial"><img class="brand-logo" src="../public/imagens/logo.png" alt="" aria-hidden="true"><span class="brand-store">Store</span></a>
             <div class="nav-links"><a class="nav-link" href="ver_games.php">Voltar ao catálogo</a><a class="nav-link nav-primary" href="../../logout.php">Sair</a></div>
         </nav>
     </header>

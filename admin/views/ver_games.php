@@ -26,7 +26,7 @@ function h(string $value): string
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
         <nav class="nav" aria-label="Navegação administrativa">
-            <a class="brand" href="../../index.php"><span class="brand-lockup">Nintendo</span><span class="brand-store">Store</span></a>
+            <a class="brand" href="../../index.php" aria-label="Nintendo Store - página inicial"><img class="brand-logo" src="../public/imagens/logo.png" alt="" aria-hidden="true"><span class="brand-store">Store</span></a>
             <div class="nav-links">
                 <a class="nav-link" href="../../index.php">Ver loja</a>
                 <a class="nav-link" aria-current="page" href="ver_games.php">Jogos</a>

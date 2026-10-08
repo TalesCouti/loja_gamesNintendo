@@ -21,7 +21,7 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
         <nav class="nav" aria-label="Navegação principal">
-            <a class="brand" href="index.php"><span class="brand-lockup">Nintendo</span><span class="brand-store">Store</span></a>
+            <a class="brand" href="index.php" aria-label="Nintendo Store - página inicial"><img class="brand-logo" src="admin/public/imagens/logo.png" alt="" aria-hidden="true"><span class="brand-store">Store</span></a>
             <div class="nav-links">
                 <a class="nav-link" href="index.php">Ver loja</a>
                 <a class="nav-link" href="admin/views/ver_games.php">Painel</a>

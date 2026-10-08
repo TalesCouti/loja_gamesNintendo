@@ -84,32 +84,15 @@ button, .button, .nav-link, .game-card { touch-action: manipulation; }
     letter-spacing: -0.025em;
     white-space: nowrap;
 }
-.brand-lockup {
-    display: inline-flex;
-    min-height: 34px;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 14px 5px;
-    border-radius: 999px;
-    background: var(--accent);
-    color: var(--accent-ink);
-    font-size: 0.92rem;
-    font-weight: 900;
-    letter-spacing: -0.055em;
-    line-height: 1;
+.brand-logo {
+    display: block;
+    width: 160px;
+    height: 40px;
+    object-fit: cover;
+    object-position: center;
 }
+.footer-logo { width: 148px; height: 38px; }
 .brand-store { color: var(--text); font-weight: 650; }
-.brand-mark {
-    display: grid;
-    width: 36px;
-    height: 36px;
-    place-items: center;
-    border-radius: 999px;
-    background: var(--accent);
-    color: var(--accent-ink);
-    font-weight: 900;
-}
-.brand-mark img { width: 100%; height: 100%; object-fit: contain; }
 .nav-links, .actions { display: flex; align-items: center; gap: 8px; }
 .nav-link {
     display: inline-flex;
@@ -189,8 +172,38 @@ button, .button, .nav-link, .game-card { touch-action: manipulation; }
 }
 .store-hero-button { background: #fff7f8; color: #a6000d; }
 .store-hero-button:hover { background: #ffe6e8; color: #86000a; }
-.store-hero-media { min-width: 0; }
-.store-hero-media img { width: 100%; height: 100%; object-fit: cover; }
+.store-hero-media {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    overflow: hidden;
+    place-items: center;
+    isolation: isolate;
+    background: #cce7ec;
+}
+.store-hero-media::before {
+    position: absolute;
+    z-index: -2;
+    inset: -28px;
+    background: url("../imagens/zelda-tears-of-the-kingdom.webp") center / cover no-repeat;
+    content: "";
+    filter: blur(18px) saturate(0.78);
+    opacity: 0.58;
+    transform: scale(1.08);
+}
+.store-hero-media::after {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(213, 239, 243, 0.34), rgba(18, 69, 78, 0.16));
+    content: "";
+}
+.store-hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 20px 34px rgba(9, 45, 52, 0.2));
+}
 
 .store-benefits {
     margin-top: 24px;

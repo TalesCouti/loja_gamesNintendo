@@ -1,83 +1,182 @@
 {
-  "generated_at": "2026-10-08T20:12:31.808193+00:00",
+  "generated_at": "2026-10-08T20:40:22.644385+00:00",
   "nodes": {
     "admin_config_conexao": {
       "code_fingerprint": "0b153e95719a668e447f8f5f46f0983b62cc5bddf1cf90bf40c15a82a175d7b5",
       "label": "conexao.php",
-      "last": "2026-10-05T19:31:00.555670+00:00",
+      "last": "2026-10-08T20:26:46.153155+00:00",
       "provenance": [
+        {
+          "date": "2026-10-08T20:26:46.153155+00:00",
+          "outcome": "useful",
+          "q": "use graphify para ler o projeto e continue a refatoração"
+        },
         {
           "date": "2026-10-05T19:31:00.555670+00:00",
           "outcome": "useful",
           "q": "pode criar models compativeis?"
         }
       ],
-      "score": 0.932411607,
+      "score": 1.931776767,
       "source_file": "admin/config/conexao.php",
-      "status": "tentative",
-      "uses": 1
+      "status": "preferred",
+      "uses": 2
     },
     "admin_controllers_deletar_game": {
       "code_fingerprint": "8b280bbb4932820b9c969f608b80771283feb375874b4842eaeff6686844f4eb",
       "label": "deletar_game.php",
-      "last": "2026-10-05T19:31:00.555670+00:00",
+      "last": "2026-10-08T20:26:46.153155+00:00",
       "provenance": [
+        {
+          "date": "2026-10-08T20:26:46.153155+00:00",
+          "outcome": "useful",
+          "q": "use graphify para ler o projeto e continue a refatoração"
+        },
         {
           "date": "2026-10-05T19:31:00.555670+00:00",
           "outcome": "useful",
           "q": "pode criar models compativeis?"
         }
       ],
-      "score": 0.932411607,
+      "score": 1.931776767,
       "source_file": "admin/controllers/deletar_game.php",
-      "status": "tentative",
-      "uses": 1
+      "status": "preferred",
+      "uses": 2
     },
     "admin_views_cadastrar_game": {
       "code_fingerprint": "7f8be40a91447fcf4d1b315119c52774c5fef4af32e6ec4fa5b5ac51fee9f667",
       "label": "cadastrar_game.php",
-      "last": "2026-10-05T19:31:00.555670+00:00",
+      "last": "2026-10-08T20:37:24.162359+00:00",
       "provenance": [
+        {
+          "date": "2026-10-08T20:37:24.162359+00:00",
+          "outcome": "useful",
+          "q": "use a logo que adicionei na pasta de imagensd"
+        },
+        {
+          "date": "2026-10-08T20:26:46.153155+00:00",
+          "outcome": "useful",
+          "q": "use graphify para ler o projeto e continue a refatoração"
+        },
         {
           "date": "2026-10-05T19:31:00.555670+00:00",
           "outcome": "useful",
           "q": "pode criar models compativeis?"
         }
       ],
-      "score": 0.932411607,
+      "score": 2.931729039,
       "source_file": "admin/views/cadastrar_game.php",
-      "status": "tentative",
-      "uses": 1
+      "status": "preferred",
+      "uses": 3
     },
     "admin_views_editar_game": {
       "code_fingerprint": "",
       "label": "editar_game.php",
-      "last": "2026-10-05T19:31:00.555670+00:00",
+      "last": "2026-10-08T20:37:24.162359+00:00",
       "provenance": [
+        {
+          "date": "2026-10-08T20:37:24.162359+00:00",
+          "outcome": "useful",
+          "q": "use a logo que adicionei na pasta de imagensd"
+        },
         {
           "date": "2026-10-05T19:31:00.555670+00:00",
           "outcome": "useful",
           "q": "pode criar models compativeis?"
         }
       ],
-      "score": 0.932411607,
+      "score": 1.93194736,
       "source_file": "admin/views/editar_game.php",
+      "status": "preferred",
+      "uses": 2
+    },
+    "admin_views_gerenciar_games": {
+      "code_fingerprint": "78cc74a5d96f020c07c24d40816f3c8a32b0fca83faaf16452409b49f40afbb7",
+      "label": "gerenciar_games.php",
+      "last": "2026-10-08T20:26:46.153155+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-08T20:26:46.153155+00:00",
+          "outcome": "useful",
+          "q": "use graphify para ler o projeto e continue a refatoração"
+        }
+      ],
+      "score": 0.999781679,
+      "source_file": "admin/views/gerenciar_games.php",
+      "status": "tentative",
+      "uses": 1
+    },
+    "admin_views_ver_games": {
+      "code_fingerprint": "0620742324169ca9ccbe211d725e9f4366f670d184b4ed012bec06abcdeb7a86",
+      "label": "ver_games.php",
+      "last": "2026-10-08T20:37:24.162359+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-08T20:37:24.162359+00:00",
+          "outcome": "useful",
+          "q": "use a logo que adicionei na pasta de imagensd"
+        }
+      ],
+      "score": 0.999952272,
+      "source_file": "admin/views/ver_games.php",
       "status": "tentative",
       "uses": 1
     },
     "banco_de_dados_schema_games": {
       "code_fingerprint": "64b35ed4364dc61c6ee4c8ba0e44b2dc0d3da05d2ed624ea8f8021f8e7216a8d",
       "label": "games table",
-      "last": "2026-10-05T19:31:00.555670+00:00",
+      "last": "2026-10-08T20:26:46.153155+00:00",
       "provenance": [
+        {
+          "date": "2026-10-08T20:26:46.153155+00:00",
+          "outcome": "useful",
+          "q": "use graphify para ler o projeto e continue a refatoração"
+        },
         {
           "date": "2026-10-05T19:31:00.555670+00:00",
           "outcome": "useful",
           "q": "pode criar models compativeis?"
         }
       ],
-      "score": 0.932411607,
+      "score": 1.931776767,
       "source_file": "banco de dados/schema.txt",
+      "status": "preferred",
+      "uses": 2
+    },
+    "index": {
+      "code_fingerprint": "d7858f689f704b56795d886fd02221b4d0b7ed3b42af3618ffcc2dae24cda9b3",
+      "label": "index.php",
+      "last": "2026-10-08T20:37:24.162359+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-08T20:37:24.162359+00:00",
+          "outcome": "useful",
+          "q": "use a logo que adicionei na pasta de imagensd"
+        },
+        {
+          "date": "2026-10-08T20:26:46.153155+00:00",
+          "outcome": "useful",
+          "q": "use graphify para ler o projeto e continue a refatoração"
+        }
+      ],
+      "score": 1.999733951,
+      "source_file": "index.php",
+      "status": "preferred",
+      "uses": 2
+    },
+    "login": {
+      "code_fingerprint": "55c735b98f4fa261f5cdaa19713190a6e8a3689b0b07bfeb811d7e0d1e42af7c",
+      "label": "login.php",
+      "last": "2026-10-08T20:37:24.162359+00:00",
+      "provenance": [
+        {
+          "date": "2026-10-08T20:37:24.162359+00:00",
+          "outcome": "useful",
+          "q": "use a logo que adicionei na pasta de imagensd"
+        }
+      ],
+      "score": 0.999952272,
+      "source_file": "login.php",
       "status": "tentative",
       "uses": 1
     }
