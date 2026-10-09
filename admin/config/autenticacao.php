@@ -31,7 +31,7 @@ function gerarTokenCsrf(): string
     return $_SESSION['csrf_token'];
 }
 
-function tokenCsrfValido(?string $token): bool
+function tokenCsrfValido($token): bool
 {
     iniciarSessaoSegura();
 
@@ -40,15 +40,76 @@ function tokenCsrfValido(?string $token): bool
         && hash_equals($_SESSION['csrf_token'], $token);
 }
 
-function usuarioAdministradorAutenticado(): bool
+function usuarioAutenticado(): bool
 {
     iniciarSessaoSegura();
 
-    return isset($_SESSION['usuario_id'], $_SESSION['usuario_tipo'])
-        && $_SESSION['usuario_tipo'] === 'admin';
+    return isset(
+        $_SESSION['usuario_id'],
+        $_SESSION['usuario_nome'],
+        $_SESSION['usuario_email'],
+        $_SESSION['usuario_tipo']
+    );
 }
 
-function autenticarAdministrador(PDO $pdo, string $email, string $senhaInformada): bool
+function usuarioAdministradorAutenticado(): bool
+{
+    return usuarioAutenticado() && $_SESSION['usuario_tipo'] === 'admin';
+}
+
+function usuarioAtual(): ?array
+{
+    if (!usuarioAutenticado()) {
+        return null;
+    }
+
+    return [
+        'id' => (int) $_SESSION['usuario_id'],
+        'nome' => (string) $_SESSION['usuario_nome'],
+        'email' => (string) $_SESSION['usuario_email'],
+        'tipo' => (string) $_SESSION['usuario_tipo'],
+    ];
+}
+
+function sincronizarSessaoUsuario(PDO $pdo): bool
+{
+    if (!usuarioAutenticado()) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare(
+        'SELECT id, nome, email, tipo
+         FROM usuarios
+         WHERE id = :id
+         LIMIT 1'
+    );
+    $stmt->execute([':id' => (int) $_SESSION['usuario_id']]);
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$usuario) {
+        return false;
+    }
+
+    $_SESSION['usuario_nome'] = (string) $usuario['nome'];
+    $_SESSION['usuario_email'] = (string) $usuario['email'];
+    $_SESSION['usuario_tipo'] = $usuario['tipo'] === 'admin' ? 'admin' : 'user';
+
+    return true;
+}
+
+function senhaUsuarioValida(string $senhaInformada, string $senhaArmazenada): bool
+{
+    if (password_verify($senhaInformada, $senhaArmazenada)) {
+        return true;
+    }
+
+    $hashLegado = preg_match('/^[a-f0-9]{64}$/i', $senhaArmazenada) === 1;
+
+    return $hashLegado
+        && hash_equals(strtolower($senhaArmazenada), hash('sha256', $senhaInformada));
+}
+
+function autenticarUsuario(PDO $pdo, string $email, string $senhaInformada): bool
 {
     $stmt = $pdo->prepare(
         'SELECT id, nome, email, senha, tipo
@@ -59,24 +120,12 @@ function autenticarAdministrador(PDO $pdo, string $email, string $senhaInformada
     $stmt->execute([':email' => $email]);
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$usuario || $usuario['tipo'] !== 'admin') {
+    if (!$usuario || !senhaUsuarioValida($senhaInformada, (string) $usuario['senha'])) {
         return false;
     }
 
     $senhaArmazenada = (string) $usuario['senha'];
-    $senhaValida = password_verify($senhaInformada, $senhaArmazenada);
     $hashLegado = preg_match('/^[a-f0-9]{64}$/i', $senhaArmazenada) === 1;
-
-    if (!$senhaValida && $hashLegado) {
-        $senhaValida = hash_equals(
-            strtolower($senhaArmazenada),
-            hash('sha256', $senhaInformada)
-        );
-    }
-
-    if (!$senhaValida) {
-        return false;
-    }
 
     if ($hashLegado || password_needs_rehash($senhaArmazenada, PASSWORD_DEFAULT)) {
         $novoHash = password_hash($senhaInformada, PASSWORD_DEFAULT);
@@ -97,20 +146,51 @@ function autenticarAdministrador(PDO $pdo, string $email, string $senhaInformada
     $_SESSION['usuario_id'] = (int) $usuario['id'];
     $_SESSION['usuario_nome'] = (string) $usuario['nome'];
     $_SESSION['usuario_email'] = (string) $usuario['email'];
-    $_SESSION['usuario_tipo'] = (string) $usuario['tipo'];
+    $_SESSION['usuario_tipo'] = $usuario['tipo'] === 'admin' ? 'admin' : 'user';
     unset($_SESSION['csrf_token']);
 
     return true;
 }
 
-function exigirAdministrador(string $urlLogin = '../../login.php'): void
+function exigirUsuario(string $urlLogin = 'login.php'): void
 {
-    if (usuarioAdministradorAutenticado()) {
-        return;
+    if (!usuarioAutenticado()) {
+        header('Location: ' . $urlLogin);
+        exit;
     }
 
-    header('Location: ' . $urlLogin);
-    exit;
+    global $pdo;
+    require_once __DIR__ . '/conexao.php';
+
+    if (!sincronizarSessaoUsuario($pdo)) {
+        encerrarSessao();
+        header('Location: ' . $urlLogin);
+        exit;
+    }
+}
+
+function exigirAdministrador(
+    string $urlLogin = '../../login.php',
+    string $urlSemPermissao = '../../index.php?acesso=negado'
+): void {
+    if (!usuarioAutenticado()) {
+        header('Location: ' . $urlLogin);
+        exit;
+    }
+
+    global $pdo;
+    require_once __DIR__ . '/conexao.php';
+
+    if (!sincronizarSessaoUsuario($pdo)) {
+        encerrarSessao();
+        header('Location: ' . $urlLogin);
+        exit;
+    }
+
+    if (!usuarioAdministradorAutenticado()) {
+        header('Location: ' . $urlSemPermissao);
+        exit;
+    }
 }
 
 function encerrarSessao(): void

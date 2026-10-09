@@ -1,14 +1,37 @@
 <?php
 require_once __DIR__ . '/admin/models/games.php';
 require_once __DIR__ . '/admin/config/imagens.php';
+require_once __DIR__ . '/admin/config/autenticacao.php';
 
+iniciarSessaoSegura();
+if (usuarioAutenticado() && !sincronizarSessaoUsuario($pdo)) {
+    encerrarSessao();
+    iniciarSessaoSegura();
+}
 $gameModel = new Game();
 $games = $gameModel->listarGames();
 $totalGames = count($games);
+$usuario = usuarioAtual();
 
 function h(string $value): string
 {
     return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
+function primeiroNomeLoja(?array $usuario): string
+{
+    if (!$usuario) {
+        return '';
+    }
+
+    return explode(' ', trim((string) $usuario['nome']))[0] ?? '';
+}
+
+function categoriaPrincipal(string $categorias): string
+{
+    $categoria = trim(explode(',', $categorias)[0] ?? '');
+
+    return $categoria !== '' ? $categoria : 'Jogo';
 }
 ?>
 <!DOCTYPE html>
@@ -32,10 +55,26 @@ function h(string $value): string
             </a>
             <div class="nav-links">
                 <a class="nav-link" href="#catalogo">Catálogo</a>
-                <a class="nav-link nav-primary" href="login.php">Painel</a>
+                <?php if ($usuario): ?>
+                    <span class="nav-user">Olá, <?= h(primeiroNomeLoja($usuario)) ?></span>
+                    <?php if ($usuario['tipo'] === 'admin'): ?>
+                        <a class="nav-link" href="admin/views/ver_games.php">Painel</a>
+                    <?php endif; ?>
+                    <a class="nav-link nav-primary" href="logout.php">Sair</a>
+                <?php else: ?>
+                    <a class="nav-link nav-primary" href="login.php">Entrar</a>
+                <?php endif; ?>
             </div>
         </nav>
     </header>
+    <div class="store-announcement" aria-label="Destaques da loja">
+        <div class="container announcement-track">
+            <span>Jogos Nintendo Switch</span>
+            <span>Estoque atualizado em tempo real</span>
+            <span>Compre com sua conta</span>
+            <span class="announcement-mobile">Nintendo Switch · estoque em tempo real</span>
+        </div>
+    </div>
 
     <main id="conteudo">
         <section class="storefront-hero" aria-labelledby="destaque-titulo">
@@ -46,6 +85,7 @@ function h(string $value): string
                         <h1 id="destaque-titulo">A aventura está lá em cima.</h1>
                         <p>Explore Hyrule por terra e pelos céus em uma jornada feita para Nintendo Switch.</p>
                         <a class="button store-hero-button" href="#catalogo">Ver jogos</a>
+                        <span class="hero-note">Mundos inesquecíveis. Uma aventura de cada vez.</span>
                     </div>
                 </div>
                 <div class="store-hero-media">
@@ -62,32 +102,57 @@ function h(string $value): string
             </div>
         </section>
 
+        <section class="store-manifesto" aria-label="Experiência Nintendo Store">
+            <div class="container manifesto-layout">
+                <p>Uma loja.</p>
+                <p>Muitos mundos.</p>
+                <span>Descubra aventuras para jogar do seu jeito, sozinho ou acompanhado.</span>
+            </div>
+        </section>
+
         <section class="section catalog-section" id="catalogo">
             <div class="container">
-                <div class="section-heading">
-                    <h2>Escolha sua próxima aventura</h2>
-                    <p><?= $totalGames ?> <?= $totalGames === 1 ? 'jogo disponível' : 'jogos disponíveis' ?> no catálogo.</p>
+                <?php if (isset($_GET['acesso'])): ?>
+                    <div class="message message-error" role="alert">Esta área é exclusiva para administradores.</div>
+                <?php endif; ?>
+                <div class="section-heading-row">
+                    <div class="section-heading">
+                        <span class="eyebrow">Catálogo Nintendo Switch</span>
+                        <h2>Escolha sua próxima aventura</h2>
+                        <p>Explore histórias, desafios e mundos feitos para todos os estilos de jogador.</p>
+                    </div>
+                    <div class="catalog-count" aria-label="<?= $totalGames ?> jogos disponíveis">
+                        <strong><?= $totalGames ?></strong>
+                        <span><?= $totalGames === 1 ? 'jogo disponível' : 'jogos disponíveis' ?></span>
+                    </div>
                 </div>
 
                 <?php if ($games): ?>
                     <div class="game-grid">
                         <?php foreach ($games as $index => $game): ?>
-                            <article class="game-card<?= $index === 0 ? ' game-card-featured' : '' ?>">
-                                <div class="game-cover-wrap">
-                                    <img class="game-cover" src="admin/public/imagens/<?= rawurlencode(imagemGameOuPlaceholder($game['imagem'] ?? '')) ?>" alt="Imagem de <?= h($game['titulo']) ?>" loading="<?= $index < 2 ? 'eager' : 'lazy' ?>" width="1200" height="675">
-                                </div>
-                                <div class="game-card-body">
-                                    <div class="game-card-copy">
-                                        <span class="game-platform">Nintendo Switch</span>
-                                        <h3><?= h($game['titulo']) ?></h3>
-                                        <p><?= h($game['descricao'] ?: 'Uma nova experiência espera por você.') ?></p>
-                                        <div class="game-meta">
-                                            <span><?= h($game['categoria'] ?: 'Sem categoria') ?></span>
-                                            <span><?= (int) $game['estoque'] ?> em estoque</span>
+                            <article class="game-card">
+                                <a class="game-card-link" href="jogo.php?id=<?= (int) $game['id'] ?>" aria-label="Ver detalhes de <?= h($game['titulo']) ?>">
+                                    <div class="game-cover-wrap">
+                                        <img class="game-cover" src="admin/public/imagens/<?= rawurlencode(imagemGameOuPlaceholder($game['imagem'] ?? '')) ?>" alt="" loading="<?= $index < 3 ? 'eager' : 'lazy' ?>" width="1200" height="675">
+                                        <span class="cover-category"><?= h(categoriaPrincipal((string) ($game['categoria'] ?? ''))) ?></span>
+                                    </div>
+                                    <div class="game-card-body">
+                                        <div class="game-card-copy">
+                                            <span class="game-platform">Nintendo Switch</span>
+                                            <h3><?= h($game['titulo']) ?></h3>
+                                            <p><?= h($game['descricao'] ?: 'Uma nova experiência espera por você.') ?></p>
+                                        </div>
+                                        <div class="game-card-footer">
+                                            <div>
+                                                <strong class="price">R$ <?= number_format((float) $game['preco'], 2, ',', '.') ?></strong>
+                                                <span class="card-stock <?= (int) $game['estoque'] > 0 ? '' : 'out-of-stock' ?>">
+                                                    <?= (int) $game['estoque'] > 0 ? (int) $game['estoque'] . ' em estoque' : 'Esgotado' ?>
+                                                </span>
+                                            </div>
+                                            <span class="card-action">Ver detalhes</span>
                                         </div>
                                     </div>
-                                    <strong class="price">R$ <?= number_format((float) $game['preco'], 2, ',', '.') ?></strong>
-                                </div>
+                                </a>
                             </article>
                         <?php endforeach; ?>
                     </div>
@@ -95,7 +160,9 @@ function h(string $value): string
                     <div class="empty-state">
                         <h2>Catálogo em preparação</h2>
                         <p>Os jogos aparecerão aqui assim que forem cadastrados.</p>
-                        <a class="button" href="login.php">Acessar painel</a>
+                        <?php if ($usuario && $usuario['tipo'] === 'admin'): ?>
+                            <a class="button" href="admin/views/cadastrar_game.php">Cadastrar jogo</a>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>
@@ -104,8 +171,15 @@ function h(string $value): string
 
     <footer class="site-footer">
         <div class="container footer-content">
-            <img class="brand-logo footer-logo" src="admin/public/imagens/logo.png" alt="Nintendo">
-            <p>Projeto demonstrativo de uma loja de jogos. Nintendo e suas franquias pertencem aos respectivos titulares.</p>
+            <div class="footer-brand">
+                <img class="brand-logo footer-logo" src="admin/public/imagens/logo.png" alt="Nintendo">
+                <p>Encontre sua próxima aventura.</p>
+            </div>
+            <div class="footer-links" aria-label="Links do rodapé">
+                <a href="#catalogo">Catálogo</a>
+                <a href="<?= $usuario ? 'logout.php' : 'login.php' ?>"><?= $usuario ? 'Sair' : 'Entrar' ?></a>
+            </div>
+            <p class="footer-legal">Projeto demonstrativo. Nintendo e suas franquias pertencem aos respectivos titulares.</p>
         </div>
     </footer>
 </body>

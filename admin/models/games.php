@@ -124,6 +124,22 @@ class Game
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function comprarGame(int $id): bool
+    {
+        if ($id <= 0) {
+            return false;
+        }
+
+        $stmt = $this->pdo->prepare(
+            'UPDATE games
+             SET estoque = estoque - 1
+             WHERE id = :id AND estoque > 0'
+        );
+        $stmt->execute([':id' => $id]);
+
+        return $stmt->rowCount() === 1;
+    }
+
     public function editarGame(): bool
     {
         if ($this->id === null || $this->id <= 0 || !$this->dadosValidos()) {
@@ -163,4 +179,3 @@ class Game
         return $stmt->execute([':id' => $this->id]);
     }
 }
-

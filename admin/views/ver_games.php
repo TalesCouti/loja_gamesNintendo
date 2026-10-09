@@ -25,11 +25,12 @@ function h(string $value): string
 <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
-        <nav class="nav" aria-label="Navegação administrativa">
+        <nav class="nav admin-nav" aria-label="Navegação administrativa">
             <a class="brand" href="../../index.php" aria-label="Nintendo Store - página inicial"><img class="brand-logo" src="../public/imagens/logo.png" alt="" aria-hidden="true"><span class="brand-store">Store</span></a>
             <div class="nav-links">
                 <a class="nav-link" href="../../index.php">Ver loja</a>
                 <a class="nav-link" aria-current="page" href="ver_games.php">Jogos</a>
+                <a class="nav-link" href="ver_usuarios.php">Usuários</a>
                 <a class="nav-link nav-primary" href="../../logout.php">Sair</a>
             </div>
         </nav>
@@ -79,7 +80,11 @@ function h(string $value): string
                                 <td>
                                     <div class="row-actions">
                                         <a class="button button-secondary" href="editar_games.php?id=<?= (int) $game['id'] ?>">Editar</a>
-                                        <a class="button button-danger" href="../controllers/deletar_game.php?id=<?= (int) $game['id'] ?>" onclick="return confirm('Deseja excluir este jogo?')">Excluir</a>
+                                        <form method="post" action="../controllers/deletar_game.php" onsubmit="return confirm('Deseja excluir este jogo?')">
+                                            <input type="hidden" name="csrf_token" value="<?= h(gerarTokenCsrf()) ?>">
+                                            <input type="hidden" name="id" value="<?= (int) $game['id'] ?>">
+                                            <button class="button button-danger" type="submit">Excluir</button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>

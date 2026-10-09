@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/admin/config/autenticacao.php';
+exigirAdministrador('login.php', 'index.php?acesso=negado');
+
 require_once __DIR__ . '/admin/config/conexao.php';
 
 // Query para buscar todos os games.
@@ -20,7 +23,7 @@ $games = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
-        <nav class="nav" aria-label="Navegação principal">
+        <nav class="nav admin-nav" aria-label="Navegação administrativa">
             <a class="brand" href="index.php" aria-label="Nintendo Store - página inicial"><img class="brand-logo" src="admin/public/imagens/logo.png" alt="" aria-hidden="true"><span class="brand-store">Store</span></a>
             <div class="nav-links">
                 <a class="nav-link" href="index.php">Ver loja</a>

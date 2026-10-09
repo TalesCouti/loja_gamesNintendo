@@ -2,8 +2,8 @@
 require_once __DIR__ . '/../config/autenticacao.php';
 exigirAdministrador('../../login.php');
 
-require_once '../models/games.php';
-require_once '../config/imagens.php';
+require_once __DIR__ . '/../models/games.php';
+require_once __DIR__ . '/../config/imagens.php';
 
 $game = new Game();
 $dados = null;
@@ -15,6 +15,10 @@ if (isset($_GET['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
+        if (!tokenCsrfValido($_POST['csrf_token'] ?? null)) {
+            throw new RuntimeException('A sessão do formulário expirou. Tente novamente.');
+        }
+
         $id = (int) ($_POST['id'] ?? 0);
         $dadosAtuais = $game->buscarGamePorId($id);
 
@@ -27,11 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $editar = new Game([
             'id' => $id,
-            'titulo' => $_POST['titulo'],
-            'descricao' => $_POST['descricao'],
-            'preco' => $_POST['preco'],
-            'estoque' => $_POST['estoque'],
-            'categoria' => $_POST['categoria'],
+            'titulo' => $_POST['titulo'] ?? '',
+            'descricao' => $_POST['descricao'] ?? '',
+            'preco' => $_POST['preco'] ?? '',
+            'estoque' => $_POST['estoque'] ?? '',
+            'categoria' => $_POST['categoria'] ?? '',
             'imagem' => $imagemNome,
         ]);
 
@@ -60,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     <header class="site-header">
-        <nav class="nav" aria-label="Navegação administrativa">
+        <nav class="nav admin-nav" aria-label="Navegação administrativa">
             <a class="brand" href="../../index.php" aria-label="Nintendo Store - página inicial"><img class="brand-logo" src="../public/imagens/logo.png" alt="" aria-hidden="true"><span class="brand-store">Store</span></a>
-            <div class="nav-links"><a class="nav-link" href="ver_games.php">Voltar ao catálogo</a><a class="nav-link nav-primary" href="../../logout.php">Sair</a></div>
+            <div class="nav-links"><a class="nav-link" href="ver_games.php">Jogos</a><a class="nav-link" href="ver_usuarios.php">Usuários</a><a class="nav-link nav-primary" href="../../logout.php">Sair</a></div>
         </nav>
     </header>
 
@@ -78,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="message message-error" role="alert"><?= htmlspecialchars($mensagem, ENT_QUOTES, 'UTF-8') ?></div>
                     <?php endif; ?>
                     <form method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(gerarTokenCsrf(), ENT_QUOTES, 'UTF-8') ?>">
                         <input type="hidden" name="id" value="<?= (int) $dados['id'] ?>">
                         <div class="form-grid">
                             <div class="field field-full">
