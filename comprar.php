@@ -2,7 +2,7 @@
 require_once __DIR__ . '/admin/config/autenticacao.php';
 exigirUsuario('login.php');
 
-require_once __DIR__ . '/admin/models/games.php';
+require_once __DIR__ . '/admin/models/social.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -17,12 +17,10 @@ if ($id <= 0 || !tokenCsrfValido($_POST['csrf_token'] ?? null)) {
     exit;
 }
 
-$gameModel = new Game();
-
-if ($gameModel->comprarGame($id)) {
-    header('Location: jogo.php?id=' . $id . '&compra=sucesso');
-    exit;
+try {
+    adicionarAoCarrinho($pdo, usuarioAtual()['id'], $id, 0, 1);
+    header('Location: carrinho.php?msg=adicionado');
+} catch (RuntimeException $e) {
+    header('Location: jogo.php?id=' . $id . '&erro=estoque');
 }
-
-header('Location: jogo.php?id=' . $id . '&erro=estoque');
 exit;

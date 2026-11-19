@@ -23,14 +23,14 @@ function destinoSeguroAposLogin(?string $destino): string
         return $id > 0 ? 'jogo.php?id=' . $id : 'index.php';
     }
 
-    return $caminho === 'index.php' ? 'index.php' : 'index.php';
+    return in_array($caminho, ['index.php', 'carrinho.php', 'amigos.php', 'presentes.php'], true) ? $caminho : 'index.php';
 }
 
 $destinoSolicitado = (string) ($_POST['redirect'] ?? $_GET['redirect'] ?? '');
 
 if (usuarioAutenticado()) {
     header('Location: ' . (
-        usuarioAdministradorAutenticado()
+        usuarioAdministradorAutenticado() && $destinoSolicitado === ''
             ? 'admin/views/ver_games.php'
             : destinoSeguroAposLogin($destinoSolicitado)
     ));
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         && autenticarUsuario($pdo, $email, $senhaInformada)
     ) {
         header('Location: ' . (
-            usuarioAdministradorAutenticado()
+            usuarioAdministradorAutenticado() && $destinoSolicitado === ''
                 ? 'admin/views/ver_games.php'
                 : destinoSeguroAposLogin($destinoSolicitado)
         ));

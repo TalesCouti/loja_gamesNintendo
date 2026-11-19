@@ -55,7 +55,10 @@ function categoriaPrincipal(string $categorias): string
             </a>
             <div class="nav-links">
                 <a class="nav-link" href="#catalogo">Catálogo</a>
+                <a class="nav-link" href="carrinho.php">Carrinho</a>
                 <?php if ($usuario): ?>
+                    <a class="nav-link" href="amigos.php">Amigos</a>
+                    <a class="nav-link" href="presentes.php">Presentes</a>
                     <span class="nav-user">Olá, <?= h(primeiroNomeLoja($usuario)) ?></span>
                     <?php if ($usuario['tipo'] === 'admin'): ?>
                         <a class="nav-link" href="admin/views/ver_games.php">Painel</a>
@@ -177,6 +180,8 @@ function categoriaPrincipal(string $categorias): string
             </div>
             <div class="footer-links" aria-label="Links do rodapé">
                 <a href="#catalogo">Catálogo</a>
+                <a href="carrinho.php">Carrinho</a>
+                <?php if ($usuario): ?><a href="amigos.php">Amigos</a><a href="presentes.php">Presentes</a><?php endif; ?>
                 <a href="<?= $usuario ? 'logout.php' : 'login.php' ?>"><?= $usuario ? 'Sair' : 'Entrar' ?></a>
             </div>
             <p class="footer-legal">Projeto demonstrativo. Nintendo e suas franquias pertencem aos respectivos titulares.</p>

@@ -2,6 +2,7 @@
 require_once __DIR__ . '/admin/config/autenticacao.php';
 require_once __DIR__ . '/admin/models/games.php';
 require_once __DIR__ . '/admin/config/imagens.php';
+require_once __DIR__ . '/admin/models/social.php';
 
 iniciarSessaoSegura();
 if (usuarioAutenticado() && !sincronizarSessaoUsuario($pdo)) {
@@ -12,6 +13,7 @@ if (usuarioAutenticado() && !sincronizarSessaoUsuario($pdo)) {
 $gameModel = new Game();
 $game = $gameModel->buscarGamePorId((int) ($_GET['id'] ?? 0));
 $usuario = usuarioAtual();
+$amigos = $usuario ? amigosConfirmados($pdo, $usuario['id']) : [];
 $imagemJogo = $game
     ? imagemGameOuPlaceholder($game['imagem'] ?? '')
     : GAME_PLACEHOLDER_IMAGE;
@@ -54,7 +56,10 @@ function primeiroNome(?array $usuario): string
             </a>
             <div class="nav-links">
                 <a class="nav-link" href="index.php#catalogo">Catálogo</a>
+                <a class="nav-link" href="carrinho.php">Carrinho</a>
                 <?php if ($usuario): ?>
+                    <a class="nav-link" href="amigos.php">Amigos</a>
+                    <a class="nav-link" href="presentes.php">Presentes</a>
                     <span class="nav-user">Olá, <?= hJogo(primeiroNome($usuario)) ?></span>
                     <?php if ($usuario['tipo'] === 'admin'): ?>
                         <a class="nav-link" href="admin/views/ver_games.php">Painel</a>
@@ -103,15 +108,21 @@ function primeiroNome(?array $usuario): string
                         <?php if ((int) $game['estoque'] <= 0): ?>
                             <button type="button" disabled>Produto esgotado</button>
                         <?php elseif ($usuario): ?>
-                            <form method="post" action="comprar.php">
+                            <form method="post" action="carrinho.php">
                                 <input type="hidden" name="csrf_token" value="<?= hJogo(gerarTokenCsrf()) ?>">
-                                <input type="hidden" name="id" value="<?= (int) $game['id'] ?>">
-                                <button type="submit">Comprar agora</button>
+                                <input type="hidden" name="acao" value="adicionar">
+                                <input type="hidden" name="game_id" value="<?= (int) $game['id'] ?>">
+                                <label for="quantidade-jogo">Quantidade</label>
+                                <input id="quantidade-jogo" type="number" name="quantidade" min="1" max="99" value="1" required>
+                                <label for="destinatario-jogo">Destinatário</label>
+                                <select id="destinatario-jogo" name="destinatario_id"><option value="0">Para mim</option><?php foreach ($amigos as $amigo): ?><option value="<?= (int) $amigo['id'] ?>">Presentear <?= hJogo($amigo['nome']) ?></option><?php endforeach; ?></select>
+                                <button type="submit">Adicionar ao carrinho</button>
                             </form>
+                            <?php if (!$amigos): ?><a class="gift-helper" href="amigos.php">Adicione amigos para enviar presentes</a><?php endif; ?>
                         <?php else: ?>
                             <a class="button" href="login.php?redirect=<?= rawurlencode('jogo.php?id=' . (int) $game['id']) ?>">Entrar para comprar</a>
                         <?php endif; ?>
-                        <p>A compra reserva uma unidade e atualiza o estoque imediatamente.</p>
+                        <p>O estoque é atualizado quando você confirma o pedido no carrinho.</p>
                     </div>
                 </div>
             </article>
