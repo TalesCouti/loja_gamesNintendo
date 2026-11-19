@@ -105,6 +105,10 @@ O [script SQL completo](banco%20de%20dados/schema.sql) cria o banco, tabelas, ch
 
 Para atualizar uma base já criada por versão anterior, faça backup e execute `php scripts/migrar_banco.php`. O script adiciona as estruturas ausentes e preserva os registros existentes.
 
+Se essa base ainda mostrar os jogos de exemplo antigos, execute `php scripts/popular_catalogo_nintendo.php`. O script cadastra os cinco títulos Nintendo com as capas locais e remove apenas os quatro exemplos antigos que não estejam vinculados a carrinhos ou pedidos.
+
+A arte de *Super Mario Bros. Wonder* foi obtida no [site oficial do jogo](https://supermariobroswonder.nintendo.com/). As imagens são usadas apenas nesta demonstração acadêmica.
+
 ### Contas de teste da importação nova
 
 | Perfil | E-mail | Senha |

@@ -104,7 +104,7 @@ INSERT INTO plataformas (nome, descricao) VALUES
 
 INSERT INTO games (titulo, descricao, preco, estoque, categoria, plataforma, imagem) VALUES
 ('The Legend of Zelda: Tears of the Kingdom', 'Explore as terras e os céus de Hyrule usando novas habilidades para criar seu próprio caminho.', 349.90, 18, 'Aventura', 'Nintendo Switch', 'zelda-tears-of-the-kingdom.webp'),
-('Super Mario Bros. Wonder', 'Viaje pelo Reino Flor e descubra fases que se transformam de maneiras surpreendentes.', 299.90, 24, 'Plataforma', 'Nintendo Switch', 'super-mario-bros-wonder.webp'),
+('Super Mario Bros. Wonder', 'Viaje pelo Reino Flor e descubra fases que se transformam de maneiras surpreendentes.', 299.90, 24, 'Plataforma', 'Nintendo Switch', 'super-mario-bros-wonder.jpg'),
 ('Mario Kart 8 Deluxe', 'Dispute corridas com Mario e seus amigos em pistas cheias de atalhos, itens e desafios.', 299.90, 30, 'Corrida', 'Nintendo Switch', 'mario-kart-8-deluxe.webp'),
 ('Animal Crossing: New Horizons', 'Crie sua ilha e viva cada dia no seu próprio ritmo.', 299.90, 16, 'Simulação', 'Nintendo Switch', 'animal-crossing-new-horizons.webp'),
 ('Pikmin 4', 'Lidere pequenos Pikmin em uma expedição de estratégia e descobertas.', 299.90, 12, 'Estratégia', 'Nintendo Switch', 'pikmin-4.webp');
