@@ -20,7 +20,7 @@ class Usuario
     public function listarUsuarios(): array
     {
         $stmt = $this->pdo->query(
-            'SELECT id, nome, email, tipo, created_at, updated_at
+            'SELECT id, nome, email, telefone, tipo, created_at, updated_at
              FROM usuarios
              ORDER BY nome, id'
         );
@@ -35,7 +35,7 @@ class Usuario
         }
 
         $stmt = $this->pdo->prepare(
-            'SELECT id, nome, email, tipo, created_at, updated_at
+            'SELECT id, nome, email, telefone, tipo, created_at, updated_at
              FROM usuarios
              WHERE id = :id
              LIMIT 1'
@@ -49,21 +49,24 @@ class Usuario
     {
         $nome = trim((string) ($dados['nome'] ?? ''));
         $email = strtolower(trim((string) ($dados['email'] ?? '')));
+        $telefone = trim((string) ($dados['telefone'] ?? ''));
         $senha = (string) ($dados['senha'] ?? '');
         $tipo = $this->normalizarTipo((string) ($dados['tipo'] ?? 'user'));
 
         $this->validarDados($nome, $email, $senha, true);
+        $this->validarTelefone($telefone);
         $this->garantirEmailDisponivel($email);
 
         $stmt = $this->pdo->prepare(
-            'INSERT INTO usuarios (nome, email, senha, tipo)
-             VALUES (:nome, :email, :senha, :tipo)'
+            'INSERT INTO usuarios (nome, email, telefone, senha, tipo)
+             VALUES (:nome, :email, :telefone, :senha, :tipo)'
         );
 
         try {
             return $stmt->execute([
                 ':nome' => $nome,
                 ':email' => $email,
+                ':telefone' => $telefone !== '' ? $telefone : null,
                 ':senha' => password_hash($senha, PASSWORD_DEFAULT),
                 ':tipo' => $tipo,
             ]);
@@ -85,10 +88,12 @@ class Usuario
 
         $nome = trim((string) ($dados['nome'] ?? ''));
         $email = strtolower(trim((string) ($dados['email'] ?? '')));
+        $telefone = trim((string) ($dados['telefone'] ?? ''));
         $senha = (string) ($dados['senha'] ?? '');
         $tipo = $this->normalizarTipo((string) ($dados['tipo'] ?? 'user'));
 
         $this->validarDados($nome, $email, $senha, false);
+        $this->validarTelefone($telefone);
         $this->garantirEmailDisponivel($email, $id);
 
         if ($usuarioAtual['tipo'] === 'admin' && $tipo !== 'admin') {
@@ -96,11 +101,12 @@ class Usuario
         }
 
         $sql = 'UPDATE usuarios
-                SET nome = :nome, email = :email, tipo = :tipo';
+                SET nome = :nome, email = :email, telefone = :telefone, tipo = :tipo';
         $parametros = [
             ':id' => $id,
             ':nome' => $nome,
             ':email' => $email,
+            ':telefone' => $telefone !== '' ? $telefone : null,
             ':tipo' => $tipo,
         ];
 
@@ -160,6 +166,13 @@ class Usuario
 
         if (($senhaObrigatoria || $senha !== '') && strlen($senha) < 8) {
             throw new RuntimeException('A senha deve ter pelo menos 8 caracteres.');
+        }
+    }
+
+    private function validarTelefone(string $telefone): void
+    {
+        if ($telefone !== '' && (mb_strlen($telefone) > 20 || !preg_match('/^[0-9()+.\-\s]+$/', $telefone) || strlen(preg_replace('/\D/', '', $telefone)) < 10)) {
+            throw new RuntimeException('Informe um telefone com DDD válido.');
         }
     }
 

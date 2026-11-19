@@ -12,6 +12,7 @@ class Game
     private float $preco = 0.0;
     private int $estoque = 0;
     private string $categoria = '';
+    private string $plataforma = '';
     private string $imagem = '';
 
     public function __construct(array $dados = [])
@@ -51,6 +52,9 @@ class Game
         if (array_key_exists('categoria', $dados)) {
             $this->categoria = trim((string) $dados['categoria']);
         }
+        if (array_key_exists('plataforma', $dados)) {
+            $this->plataforma = trim((string) $dados['plataforma']);
+        }
 
         if (array_key_exists('imagem', $dados)) {
             $this->imagem = basename((string) $dados['imagem']);
@@ -61,7 +65,9 @@ class Game
     {
         return $this->titulo !== ''
             && $this->preco >= 0
-            && $this->estoque >= 0;
+            && $this->estoque >= 0
+            && $this->categoria !== ''
+            && $this->plataforma !== '';
     }
 
     public function cadastrarGame(): bool
@@ -71,9 +77,9 @@ class Game
         }
 
         $sql = 'INSERT INTO games
-                    (titulo, descricao, preco, estoque, categoria, imagem)
+                    (titulo, descricao, preco, estoque, categoria, plataforma, imagem)
                 VALUES
-                    (:titulo, :descricao, :preco, :estoque, :categoria, :imagem)';
+                    (:titulo, :descricao, :preco, :estoque, :categoria, :plataforma, :imagem)';
 
         $stmt = $this->pdo->prepare($sql);
         $resultado = $stmt->execute([
@@ -82,6 +88,7 @@ class Game
             ':preco' => $this->preco,
             ':estoque' => $this->estoque,
             ':categoria' => $this->categoria,
+            ':plataforma' => $this->plataforma !== '' ? $this->plataforma : null,
             ':imagem' => $this->imagem,
         ]);
 
@@ -94,7 +101,7 @@ class Game
 
     public function listarGames(): array
     {
-        $sql = 'SELECT id, titulo, descricao, preco, estoque, categoria, imagem,
+        $sql = 'SELECT id, titulo, descricao, preco, estoque, categoria, plataforma, imagem,
                        created_at, updated_at
                 FROM games
                 ORDER BY id DESC';
@@ -113,7 +120,7 @@ class Game
         }
 
         $stmt = $this->pdo->prepare(
-            'SELECT id, titulo, descricao, preco, estoque, categoria, imagem,
+            'SELECT id, titulo, descricao, preco, estoque, categoria, plataforma, imagem,
                     created_at, updated_at
              FROM games
              WHERE id = :id
@@ -152,6 +159,7 @@ class Game
                     preco = :preco,
                     estoque = :estoque,
                     categoria = :categoria,
+                    plataforma = :plataforma,
                     imagem = :imagem
                 WHERE id = :id';
 
@@ -164,6 +172,7 @@ class Game
             ':preco' => $this->preco,
             ':estoque' => $this->estoque,
             ':categoria' => $this->categoria,
+            ':plataforma' => $this->plataforma !== '' ? $this->plataforma : null,
             ':imagem' => $this->imagem,
         ]);
     }

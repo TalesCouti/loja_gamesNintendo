@@ -1,0 +1,116 @@
+<?php if (!defined('MVC_RENDER')) { http_response_code(403); exit; } ?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#e60012">
+    <meta name="description" content="<?= $game ? hJogo((string) $game['descricao']) : 'Jogo não encontrado na Nintendo Store.' ?>">
+    <title><?= $game ? hJogo((string) $game['titulo']) . ' | Nintendo Store' : 'Jogo não encontrado | Nintendo Store' ?></title>
+    <link rel="stylesheet" href="admin/public/css/style.css">
+</head>
+<body class="storefront-page">
+    <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <header class="site-header">
+        <nav class="nav" aria-label="Navegação principal">
+            <a class="brand store-brand" href="index.php" aria-label="Nintendo Store - página inicial">
+                <img class="brand-logo" src="admin/public/imagens/logo.png" alt="" aria-hidden="true">
+                <span class="brand-store">Store</span>
+            </a>
+            <div class="nav-links">
+                <a class="nav-link" href="index.php#catalogo">Catálogo</a>
+                <a class="nav-link" href="carrinho.php">Carrinho</a>
+                <?php if ($usuario): ?>
+                    <a class="nav-link" href="amigos.php">Amigos</a>
+                    <a class="nav-link" href="presentes.php">Presentes</a>
+                    <span class="nav-user">Olá, <?= hJogo(primeiroNome($usuario)) ?></span>
+                    <?php if ($usuario['tipo'] === 'admin'): ?>
+                        <a class="nav-link" href="admin/views/ver_games.php">Painel</a>
+                    <?php endif; ?>
+                    <a class="nav-link nav-primary" href="logout.php">Sair</a>
+                <?php else: ?>
+                    <a class="nav-link" href="registrar.php">Criar conta</a>
+                    <a class="nav-link nav-primary" href="login.php?redirect=<?= rawurlencode('jogo.php?id=' . (int) ($game['id'] ?? 0)) ?>">Entrar</a>
+                <?php endif; ?>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container game-detail-page" id="conteudo">
+        <a class="back-link" href="index.php#catalogo">Voltar ao catálogo</a>
+
+        <?php if ($game): ?>
+            <?php if (isset($_GET['compra']) && $_GET['compra'] === 'sucesso'): ?>
+                <div class="message purchase-message" role="status">Compra realizada. O estoque foi atualizado.</div>
+            <?php elseif (isset($_GET['erro'])): ?>
+                <div class="message message-error purchase-message" role="alert">Não foi possível concluir a compra. Verifique o estoque e tente novamente.</div>
+            <?php endif; ?>
+
+            <article class="game-detail">
+                <div class="game-detail-media" style="--game-art: url('admin/public/imagens/<?= rawurlencode($imagemJogo) ?>')">
+                    <img src="admin/public/imagens/<?= rawurlencode($imagemJogo) ?>" width="1200" height="675" alt="<?= $imagemJogo === GAME_PLACEHOLDER_IMAGE ? 'Arte ilustrativa de jogo' : 'Imagem de ' . hJogo((string) $game['titulo']) ?>">
+                </div>
+                <div class="game-detail-content">
+                    <div>
+                        <span class="game-platform"><?= hJogo((string) ($game['plataforma'] ?: 'Jogo')) ?></span>
+                        <h1><?= hJogo((string) $game['titulo']) ?></h1>
+                        <p class="game-detail-description"><?= hJogo((string) ($game['descricao'] ?: 'Uma nova experiência espera por você.')) ?></p>
+                        <div class="game-detail-meta">
+                            <span><?= hJogo((string) ($game['categoria'] ?: 'Sem categoria')) ?></span>
+                            <span class="<?= (int) $game['estoque'] > 0 ? 'in-stock' : 'out-of-stock' ?>">
+                                <?= (int) $game['estoque'] > 0 ? (int) $game['estoque'] . ' unidades disponíveis' : 'Produto esgotado' ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="purchase-panel">
+                        <div>
+                            <span>Preço</span>
+                            <strong>R$ <?= number_format((float) $game['preco'], 2, ',', '.') ?></strong>
+                        </div>
+
+                        <?php if ((int) $game['estoque'] <= 0): ?>
+                            <button type="button" disabled>Produto esgotado</button>
+                        <?php elseif ($usuario): ?>
+                            <form method="post" action="carrinho.php">
+                                <input type="hidden" name="csrf_token" value="<?= hJogo(gerarTokenCsrf()) ?>">
+                                <input type="hidden" name="acao" value="adicionar">
+                                <input type="hidden" name="game_id" value="<?= (int) $game['id'] ?>">
+                                <label for="quantidade-jogo">Quantidade</label>
+                                <input id="quantidade-jogo" type="number" name="quantidade" min="1" max="99" value="1" required>
+                                <label for="destinatario-jogo">Destinatário</label>
+                                <select id="destinatario-jogo" name="destinatario_id"><option value="0">Para mim</option><?php foreach ($amigos as $amigo): ?><option value="<?= (int) $amigo['id'] ?>">Presentear <?= hJogo($amigo['nome']) ?></option><?php endforeach; ?></select>
+                                <button type="submit">Adicionar ao carrinho</button>
+                            </form>
+                            <?php if (!$amigos): ?><a class="gift-helper" href="amigos.php">Adicione amigos para enviar presentes</a><?php endif; ?>
+                        <?php else: ?>
+                            <a class="button" href="login.php?redirect=<?= rawurlencode('jogo.php?id=' . (int) $game['id']) ?>">Entrar para comprar</a>
+                        <?php endif; ?>
+                        <p>O estoque é atualizado quando você confirma o pedido no carrinho.</p>
+                    </div>
+                </div>
+            </article>
+        <?php else: ?>
+            <div class="empty-state">
+                <h1>Jogo não encontrado</h1>
+                <p>O item solicitado não existe ou foi removido do catálogo.</p>
+                <a class="button" href="index.php#catalogo">Ver catálogo</a>
+            </div>
+        <?php endif; ?>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <img class="brand-logo footer-logo" src="admin/public/imagens/logo.png" alt="Nintendo">
+                <p>Encontre sua próxima aventura.</p>
+            </div>
+            <div class="footer-links" aria-label="Links do rodapé">
+                <a href="index.php#catalogo">Catálogo</a>
+                <a href="<?= $usuario ? 'logout.php' : 'login.php' ?>"><?= $usuario ? 'Sair' : 'Entrar' ?></a>
+            </div>
+            <p class="footer-legal">Projeto demonstrativo. Nintendo e suas franquias pertencem aos respectivos titulares.</p>
+        </div>
+    </footer>
+</body>
+</html>
