@@ -41,42 +41,87 @@ As rotas públicas ficam na raiz. O processamento está em `admin/controllers/`,
 ```mermaid
 classDiagram
     class Usuario {
-      +listarUsuarios()
+      -PDO pdo
+      +int id
+      +string nome
+      +string email
+      +string telefone
+      +string senha
+      +string tipo
+      +datetime created_at
+      +datetime updated_at
+      +__construct()
+      +listarUsuarios() array
       +buscarUsuarioPorId(id)
-      +cadastrarUsuario(dados)
-      +editarUsuario(id, dados)
-      +deletarUsuario(id, logado)
+      +cadastrarUsuario(dados) bool
+      +editarUsuario(id, dados) bool
+      +deletarUsuario(id, usuarioLogadoId) bool
     }
     class Game {
-      +listarGames()
+      -PDO pdo
+      -int id
+      -string titulo
+      -string descricao
+      -float preco
+      -int estoque
+      -string categoria
+      -string plataforma
+      -string imagem
+      +__construct(dados)
+      +listarGames() array
       +buscarGamePorId(id)
-      +cadastrarGame()
-      +editarGame()
-      +deletarGame()
+      +cadastrarGame() bool
+      +editarGame() bool
+      +deletarGame() bool
+      +comprarGame(id) bool
     }
     class Taxonomia {
-      +listar()
+      <<abstract>>
+      #PDO pdo
+      #string tabela
+      +__construct(pdo, tabela)
+      +listar() array
       +buscar(id)
-      +criar(nome, descricao)
-      +atualizar(id, nome, descricao)
-      +excluir(id)
+      +criar(nome, descricao) int
+      +atualizar(id, nome, descricao) bool
+      +excluir(id) bool
     }
-    class Categoria
-    class Plataforma
+    class Categoria {
+      +int id
+      +string nome
+      +string descricao
+      +__construct(pdo)
+    }
+    class Plataforma {
+      +int id
+      +string nome
+      +string descricao
+      +__construct(pdo)
+    }
     class Pedido {
-      +listar()
+      -PDO pdo
+      +int id
+      +int usuario_id
+      +decimal total
+      +string status
+      +string observacao
+      +datetime created_at
+      +__construct(pdo)
+      +listar() array
       +buscar(id)
-      +criar(usuario, game, quantidade)
-      +atualizar(id, status, observacao)
-      +excluir(id)
+      +criar(usuarioId, gameId, quantidade, observacao) int
+      +atualizar(id, status, observacao) void
+      +excluir(id) void
     }
     Taxonomia <|-- Categoria
     Taxonomia <|-- Plataforma
     Categoria "1" <-- "0..*" Game : classifica
-    Plataforma "1" <-- "0..*" Game : executa
-    Usuario "1" <-- "0..*" Pedido : compra
-    Pedido "1" --> "1..*" Game : itens
+    Plataforma "1" <-- "0..*" Game : disponibiliza
+    Usuario "1" --> "0..*" Pedido : realiza
+    Pedido "0..*" --> "1..*" Game : itens via pedido_itens
 ```
+
+Os atributos públicos representam os campos persistidos no MySQL; `senha` guarda um hash. Em `Usuario`, `Pedido`, `Categoria` e `Plataforma`, os registros são lidos como arrays pelo PDO; esses campos não são propriedades declaradas nessas classes PHP. `Game` também mantém seus dados em propriedades privadas. `Categoria` e `Plataforma` herdam os métodos de CRUD de `Taxonomia`.
 
 ## Modelo do banco de dados
 
